@@ -1,10 +1,12 @@
 /* eslint-disable */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavLink} from 'react-router-dom'
 import Header from '../../shared/Header'
 import Footer from '../../shared/Footer'
+import {getModApp} from '../../../Services/ModAppService'
 let Home = () => {
     let [currentCarouselItem, setCurrentCarouselItem] = useState(2);
+    let [modAppData, setModAppData] = useState([]);
     let updateNextCarousel = () => {
         if (currentCarouselItem < 4)
         setCurrentCarouselItem(currentCarouselItem + 1)
@@ -17,6 +19,16 @@ let Home = () => {
         if (currentCarouselItem === 1)
         setCurrentCarouselItem(4)
     }
+
+    let getModAppFun = async () => {
+let result = await getModApp();
+setModAppData(result.data)
+// console.log(result.data)
+    }
+
+    useEffect(()=> {
+      getModAppFun()
+    }, [])
   return (
   <>
   {/* <div className="loader-wrapper">
@@ -365,14 +377,14 @@ let Home = () => {
       <div className="news-col-one">
         <div className="news-card-two">
           <div className="news-card-img">
-            <img src="/assets/img/news/news-1.webp" alt="Image" />
-            <a href="business.html" className="news-cat">Social</a>
+            <img src="/assets/img/news/telegram/telegram-1.jpg" alt="Image" />
+            <a href="business.html" className="news-cat">{modAppData[0]?.category}</a>
           </div>
           <div className="news-card-info">
-            <h3><NavLink to="/details/app/telegram/g46kad3ncF5gl75jd2fa">Telegram v10.2.5 MOD APK (Premium, Optimized, Lite)</NavLink></h3>
+            <h3><NavLink to={`/details/app/telegram/${modAppData[0]?._id}`}>{modAppData[0]?.app_name}</NavLink></h3>
             <ul className="news-metainfo list-style">
-              <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">November 7, 2023</a></li>
-              <li><i className="fi fi-rr-fire-flame-curved" />Telegram</li>
+              <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">{modAppData[0]?.upload_date}</a></li>
+              <li><i className="fi fi-rr-fire-flame-curved" />{modAppData[0]?.category}</li>
             </ul>
           </div>
         </div>
