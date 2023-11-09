@@ -3,10 +3,11 @@ import React, {useState, useEffect} from 'react';
 import {NavLink} from 'react-router-dom'
 import Header from '../../shared/Header'
 import Footer from '../../shared/Footer'
-import {getModApp} from '../../../Services/ModAppService'
+import {getModApp, getModAppById} from '../../../Services/ModAppService'
 let Home = () => {
     let [currentCarouselItem, setCurrentCarouselItem] = useState(2);
     let [modAppData, setModAppData] = useState([]);
+    let [modName, setModName] = useState('');
     let updateNextCarousel = () => {
         if (currentCarouselItem < 4)
         setCurrentCarouselItem(currentCarouselItem + 1)
@@ -19,29 +20,23 @@ let Home = () => {
         if (currentCarouselItem === 1)
         setCurrentCarouselItem(4)
     }
-
     let getModAppFun = async () => {
 let result = await getModApp();
 setModAppData(result.data)
 // console.log(result.data)
     }
-
+    let getModAppFunById = async () => {
+      let result = await getModAppById(id);
+      let name = result?.data[0]?.description.split('.!')[0];
+      setModName(name)
+          }
+      
     useEffect(()=> {
       getModAppFun()
+      getModAppFunById()
     }, [])
   return (
   <>
-  {/* <div className="loader-wrapper">
-    <div className="loader" />
-    <div className="loader-section section-left" />
-    <div className="loader-section section-right" />
-  </div> */}
-  {/* <div className="switch-theme-mode">
-    <label id="switch" className="switch">
-      <input type="checkbox" onchange="toggleTheme()" id="slider" />
-      <span className="slider round" />
-    </label>
-  </div> */}
 <Header />
   <div className="responsive-navbar offcanvas offcanvas-end" data-bs-backdrop="static" tabIndex={-1} id="navbarOffcanvas">
     <div className="offcanvas-header">
@@ -381,7 +376,7 @@ setModAppData(result.data)
             <a href="business.html" className="news-cat">{modAppData[0]?.category}</a>
           </div>
           <div className="news-card-info">
-            <h3><NavLink to={`/details/app/telegram/${modAppData[0]?._id}`}>{modAppData[0]?.app_name}</NavLink></h3>
+            <h3><NavLink to={`/details/app/${modName}/${modAppData[0]?._id}`}>{modAppData[0]?.app_name}</NavLink></h3>
             <ul className="news-metainfo list-style">
               <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">{modAppData[0]?.upload_date}</a></li>
               <li><i className="fi fi-rr-fire-flame-curved" />{modAppData[0]?.category}</li>
