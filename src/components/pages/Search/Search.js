@@ -1,18 +1,35 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import Header from '../../shared/Header'
-import {NavLink} from 'react-router-dom'
 import Footer from '../../shared/Footer'
-let Pricing = () => {
+import { NavLink, useParams } from 'react-router-dom'
+import { getModAppByQuery } from '../../../Services/ModAppSearchService'
 
+const Search = () => {
+  let searchQuery = useParams().query;
+  let [searchResult, setSearchResult] = useState([])
+  let [modName, setModName] = useState('');
+
+  let getAppFun = async ()=> {
+    let result = await getModAppByQuery(searchQuery);
+    if(result?.data?.status === 200) {
+      setSearchResult(result?.data?.resultedData)
+      let name = result?.data?.resultedData[0]?.description.split('.!')[0];
+      setModName(name); // Set the state here
+    }
+  }
+
+  useEffect(()=> {
+    getAppFun()
+  }, [searchQuery])
   return (
-<>
+    <>
 <Header />
   <div className="responsive-navbar offcanvas offcanvas-end" data-bs-backdrop="static" tabIndex={-1} id="navbarOffcanvas">
     <div className="offcanvas-header">
       <a href="index.html" className="logo d-inline-block">
-        <img className="logo-light" src="assets/img/logo.webp" alt="logo" />
-        <img className="logo-dark" src="assets/img/logo-white.webp" alt="logo" />
+        <img className="logo-light" src="/assets/img/logo.webp" alt="logo" />
+        <img className="logo-dark" src="/assets/img/logo-white.webp" alt="logo" />
       </a>
       <button type="button" className="close-btn" data-bs-dismiss="offcanvas" aria-label="Close">
         <i className="ri-close-line" />
@@ -21,14 +38,14 @@ let Pricing = () => {
     <div className="offcanvas-body">
       <div className="accordion" id="navbarAccordion">
         <div className="accordion-item">
-          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          <button className="accordion-button collapsed active" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
             Home
           </button>
           <div id="collapseOne" className="accordion-collapse collapse" data-bs-parent="#navbarAccordion">
             <div className="accordion-body">
               <div className="accordion" id="navbarAccordion2">
                 <div className="accordion-item">
-                  <a className="accordion-link" href="index.html">
+                  <a className="accordion-link active" href="index.html">
                     Home Demo One
                   </a>
                 </div>
@@ -177,7 +194,7 @@ let Pricing = () => {
           </div>
         </div>
         <div className="accordion-item">
-          <button className="accordion-button collapsed active" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
             Shop
           </button>
           <div id="collapseFive" className="accordion-collapse collapse" data-bs-parent="#navbarAccordion">
@@ -189,7 +206,7 @@ let Pricing = () => {
                   </a>
                 </div>
                 <div className="accordion-item">
-                  <a href="shop-left-sidebar.html" className="accordion-link active">
+                  <a href="shop-left-sidebar.html" className="accordion-link">
                     Shop Left Sidebar
                   </a>
                 </div>
@@ -242,7 +259,7 @@ let Pricing = () => {
           </li>
           <li>
             <i className="ri-mail-fill" />
-            <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#5d35383131321d3f3c2532733e3230"><span className="__cf_email__" data-cfemail="19717c757576597b786176377a7674">[email&nbsp;protected]</span></a>
+            <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#2b434e4747446b494a534405484446"><span className="__cf_email__" data-cfemail="8ee6ebe2e2e1ceeceff6e1a0ede1e3">[email&nbsp;protected]</span></a>
           </li>
           <li>
             <i className="ri-phone-fill" />
@@ -263,115 +280,69 @@ let Pricing = () => {
       </div>
     </div>
   </div>
-  <div className="product-wrap ptb-100">
+  {/* <div className="breadcrumb-wrap">
     <div className="container">
-  {/* Pricing # */}
-  <div className="pricing">
-    <div className="container">
-      <div className="pricing-table table-responsive">
-        <table className="table">
-          {/* Heading */}
-          <thead>
-            <tr>
-              <th>&nbsp;</th>
-              <th className="highlight">
-                Free
-                <span className="ptable-price">₹0</span>
-              </th>
-              <th>
-                Starter
-                <span className="ptable-price">₹99</span>
-              </th>
-              <th>
-                Premium
-                <span className="ptable-price">₹149</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span className="ptable-title"><i className="fa fa-bullhorn" /> Ads</span></td>
-              <td>
-                {/* Icon */}
-                <i className="fa fa-bullhorn red" />
-                Each Download Ad
-              </td>
-              <td>
-                {/* Icon */}
-                <i className="fa fa-bullhorn green" />
-                No Ad
-              </td>
-              <td>
-                {/* Icon */}
-                <i className="fa fa-bullhorn lblue" />
-                No Ad
-              </td>
-            </tr>
-            <tr>
-              <td><span className="ptable-title"><i className="fa fa-cloud-download" /> Download Limit</span></td>
-              <td>
-                <i className="fa fa-cloud-download red" />
-                5
-              </td>
-              <td>
-                <i className="fa fa-cloud-download green" />
-                15
-              </td>
-              <td>
-                <i className="fa fa-cloud-download lblue" />
-                50
-              </td>
-            </tr>
-            <tr>
-              <td><span className="ptable-title"><i className="fa fa-trophy" /> Lucky Draw <br /><small>(per month)</small></span></td>
-              <td>
-                <i className="fa fa-times red" />
-                No lucky draw
-              </td>
-              <td>
-                <i className="fa fa-trophy green" />
-                10 lucky draw
-              </td>
-              <td>
-                <i className="fa fa-trophy lblue" />
-                30 lucky draw
-              </td>
-            </tr>
-            <tr>
-              <td><span className="ptable-title"><i className="fa fa-headphones" /> Support</span></td>
-              <td>
-                <i className="fa fa-times red" />
-                No Support
-              </td>
-              <td>
-                <i className="fa fa-envelope-o green" />
-                E-mail
-              </td>
-              <td>
-                <i className="fa fa-envelope-o lblue" />
-                E-mail / Phone
-              </td>
-            </tr>
-            {/* Buttons */}
-            <tr>
-              <td>&nbsp;</td>
-              <td className="bg-red"><a className="btn" href="#">Buy now</a></td>
-              <td className="bg-green"><a className="btn" href="#">Buy now</a></td>
-              <td className="bg-lblue"><a className="btn" href="#">Buy now</a></td>
-            </tr>
-          </tbody>
-        </table>
+      <h2 className="breadcrumb-title">Shop Grid</h2>
+      <ul className="breadcrumb-menu list-style">
+        <li><a href="index.html">Home</a></li>
+        <li>Shop</li>
+      </ul>
+    </div>
+  </div> */}
+  {searchResult?.length > 0 ? (  <div className="container ptb-100">
+    <div className="row align-items-center">
+      <div className="col-md-6">
+        <p className="search-result">Showing 1{searchResult?.length > 1 ? (searchResult?.length > 8 ? '-8' : `-${searchResult?.length}`) : ''}  of {searchResult?.length} Results</p>
+      </div>
+      <div className="col-md-6 text-md-end">
+        <select name="product-filter" id="product-filter">
+          <option value={0}>Default Sorting</option>
+          <option value={1}>Price: High To Low</option>
+          <option value={2}>Price: Low To High</option>
+        </select>
+      </div>
+    </div>
+    <div className="row justify-content-center">
+    {searchResult?.map((resulteditem) => (
+      <div className="col-xxl-3 col-xl-4 col-lg-4 col-md-6" key={resulteditem?.app_name}>
+        <div className="product-card">
+          <div className="product-card-img">
+            <img src={resulteditem?.banner_image} alt={resulteditem?.app_name} />
+            {/* <a href="cart.html" className="btn-two add-to-cart">Add To Cart</a> */}
+          </div>
+          <h3><NavLink to={`/details/app/${modName}/${resulteditem?._id}`}>{resulteditem?.app_name}</NavLink></h3>
+          <div className="product-price"><i className="fi fi-rr-fire-flame-curved" />{resulteditem?.category}</div>
+        </div>
+      </div>
+      ))}
+    </div>
+    {searchResult?.length > 8 && (    <ul className="page-nav list-style text-center mt-20">
+      <li><a href="shop-left-sidebar.html"><i className="flaticon-arrow-left" /></a></li>
+      <li><a className="active" href="shop-left-sidebar.html">01</a></li>
+      <li><a href="shop-left-sidebar.html">02</a></li>
+      <li><a href="shop-left-sidebar.html">03</a></li>
+      <li><a href="shop-left-sidebar.html"><i className="flaticon-arrow-right" /></a></li>
+    </ul>)}
+  </div>) : (<div className="error-wrap ptb-100">
+  <div className="container">
+    <div className="row">
+      <div className="col-lg-8 offset-lg-2">
+        <div className="error-content">
+          <img src="/assets/img/404.webp" alt="Iamge" />
+          <h2>Oops! No App Found with <span style={{color : ' #E93314'}}>{searchQuery}</span></h2>
+          <p>I’m sorry, but the application you’re attempting to locate has not been uploaded yet, or there may have been a misspelling in your search query. Please try searching for something else. Thank you for your understanding.</p>
+          <button type='button' data-bs-toggle="modal" data-bs-target="#searchModal" className="btn-one">Search something else<i className="flaticon-right-arrow" /></button>
+        </div>
       </div>
     </div>
   </div>
+</div>)}
 
-    </div>
-  </div>
-<Footer />
+  <Footer />
   <button type="button" id="backtotop" className="position-fixed text-center border-0 p-0">
     <i className="ri-arrow-up-line" />
   </button>
-  {/* <div className="modal fade" id="newsletter-popup" tabIndex={-1} aria-labelledby="newsletter-popup" aria-hidden="true">
+  <div className="modal fade" id="newsletter-popup" tabIndex={-1} aria-labelledby="newsletter-popup" aria-hidden="true">
     <div className="modal-dialog modal-dialog-centered modal-xl">
       <div className="modal-content">
         <button type="button" className="btn_close" data-bs-dismiss="modal" aria-label="Close">
@@ -380,7 +351,7 @@ let Pricing = () => {
         <div className="modal-body">
           <div className="newsletter-bg bg-f" />
           <div className="newsletter-content">
-            <img src="assets/img/newsletter-icon.webp" alt="Image" className="newsletter-icon" />
+            <img src="/assets/img/newsletter-icon.webp" alt="Image" className="newsletter-icon" />
             <h2>Join Our Newsletter &amp; Read The New Posts First</h2>
             <form action="#" className="newsletter-form">
               <input type="email" placeholder="Email Address" />
@@ -396,11 +367,10 @@ let Pricing = () => {
         </div>
       </div>
     </div>
-  </div> */}
+  </div>
 
-</>
-
-  );
+    </>
+  )
 }
 
-export default Pricing;
+export default Search

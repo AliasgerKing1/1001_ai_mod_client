@@ -25,15 +25,15 @@ let result = await getModApp();
 setModAppData(result.data)
 // console.log(result.data)
     }
-    let getModAppFunById = async () => {
+    let getModAppFunById = async (id) => {
       let result = await getModAppById(id);
       let name = result?.data[0]?.description.split('.!')[0];
-      setModName(name)
-          }
+      setModName(name); // Set the state here
+    }
+    
       
     useEffect(()=> {
       getModAppFun()
-      getModAppFunById()
     }, [])
   return (
   <>
@@ -293,17 +293,6 @@ setModAppData(result.data)
       </div>
     </div>
   </div>
-  <div className="modal fade searchModal" id="searchModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-hidden="true">
-    <div className="modal-dialog">
-      <div className="modal-content">
-        <form>
-          <input type="text" className="form-control" placeholder="Search here...." />
-          <button type="submit"><i className="fi fi-rr-search" /></button>
-        </form>
-        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"><i className="ri-close-line" /></button>
-      </div>
-    </div>
-  </div>
 {/* <div className="container-fluid">
   <div className="trending-news-box">
     <div className="row gx-5">
@@ -376,7 +365,7 @@ setModAppData(result.data)
             <a href="business.html" className="news-cat">{modAppData[0]?.category}</a>
           </div>
           <div className="news-card-info">
-            <h3><NavLink to={`/details/app/${modName}/${modAppData[0]?._id}`}>{modAppData[0]?.app_name}</NavLink></h3>
+            <h3 onClick={()=> getModAppFunById(modAppData[0]?._id)}><NavLink to={`/details/app/telegram/${modAppData[0]?._id}`}>{modAppData[0]?.app_name}</NavLink></h3>
             <ul className="news-metainfo list-style">
               <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">{modAppData[0]?.upload_date}</a></li>
               <li><i className="fi fi-rr-fire-flame-curved" />{modAppData[0]?.category}</li>
@@ -425,12 +414,12 @@ setModAppData(result.data)
       </div>
       <div className="news-col-two">
         <div className="news-card-four">
-          <img src="/assets/img/news/news-58.webp" alt="Image" />
+          <img src="/assets/img/news/telegram/clash-of-clans-banner.jpg" alt="Image" />
           <div className="news-card-info">
-            <h3><a href="business-details.html">Best VR Headsets For PC And Gaming This Year</a></h3>
+            <h3 onClick={()=> getModAppFunById(modAppData[1]?._id)}><NavLink to={`/details/app/clash of clans/${modAppData[1]?._id}`}>{modAppData[1]?.app_name}</NavLink></h3>
             <ul className="news-metainfo list-style">
-              <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Apr 08, 2023</a></li>
-              <li><i className="fi fi-rr-clock-three" />14 Min Read</li>
+              <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">{modAppData[1]?.upload_date}</a></li>
+              <li><i className="fi fi-rr-fire-flame-curved" />{modAppData[1]?.category}</li>
             </ul>
           </div>
         </div>
@@ -466,14 +455,14 @@ setModAppData(result.data)
       <div className="news-col-three">
         <div className="news-card-two">
           <div className="news-card-img">
-            <img src="/assets/img/news/news-2.webp" alt="Image" />
-            <a href="business.html" className="news-cat">Politics</a>
+            <img src="/assets/img/news/telegram/homescapes.jpeg" alt="Image" />
+            <a href="business.html" className="news-cat">{modAppData[2]?.category}</a>
           </div>
           <div className="news-card-info">
-            <h3><a href="business-details.html">Elijah James: The Nashville Photographer Shares Her Unique Journey</a></h3>
+            <h3 onClick={()=> getModAppFunById(modAppData[2]?._id)}><NavLink to={`/details/app/homescapes/${modAppData[2]?._id}`}>{modAppData[2]?.app_name}</NavLink></h3>
             <ul className="news-metainfo list-style">
-              <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">Apr 03, 2023</a></li>
-              <li><i className="fi fi-rr-clock-three" />12 Min Read</li>
+            <li><i className="fi fi-rr-calendar-minus" /><a href="news-by-date.html">{modAppData[2]?.upload_date}</a></li>
+              <li><i className="fi fi-rr-fire-flame-curved" />{modAppData[2]?.category}</li>
             </ul>
           </div>
         </div>

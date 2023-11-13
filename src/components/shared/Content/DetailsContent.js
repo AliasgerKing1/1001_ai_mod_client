@@ -3,22 +3,30 @@ import React, {useState ,useEffect } from 'react'
 import {NavLink} from 'react-router-dom'
 const DetailsContent = ({name, data}) => {
   let [completePage, setCompletePage] = useState([])
-  
   useEffect(() => {
     if (data?.description) {
       let splitedData = data?.description.split('.!')
       let completePage = [];
-      let imageIndex = 0; // add an index for images
+      let imageIndex = 1; // add an index for images
       let skipImage = false; // flag to check if the last line was "Mod Info -"
+      let modInfoIndex = -1; // index to store the position of "Mod Info -"
       splitedData.forEach((pageItem, index) => {
         let lines = pageItem.split('\n');
         let tempList = [];
         lines.forEach(line => {
+          if (line.includes("--=")) { // if line contains "--="
+            completePage.push(line); // add line to completePage
+            return;
+          }
           if (line.match(/^\d+\).+/g)) { // if line matches "number) text"
             let newLine = line.replace(/^\d+\)\s*/, ''); // remove "number) "
             tempList.push(newLine);
           } else if (line == "Mod Info -") { // if line is "Mod Info -"
             completePage.push(`<>${line}`); // add line as h3 to completePage
+            modInfoIndex = completePage.length; // store the position of "Mod Info -"
+            skipImage = true; // set skipImage to true
+          } else if (line == name) { // if line is "Mod Info -"
+            completePage.push(line); // add line as h3 to completePage
             skipImage = true; // set skipImage to true
           } else { // if line does not match "number) text"
             completePage.push(line); // add line as plain text to tempList
@@ -29,14 +37,16 @@ const DetailsContent = ({name, data}) => {
           completePage.push(data.image[imageIndex]); // add image to completePage
           imageIndex++; // increment image index only when an image is added
         }
-        if (tempList.length > 0) {
-          completePage.push(tempList); // add tempList to completePage if it's not empty
+        if (tempList.length > 0 && modInfoIndex != -1) {
+          completePage.splice(modInfoIndex, 0, tempList); // add tempList to completePage at the position of "Mod Info -" if it's not empty
         }
       });
       let filteredCompletePage = completePage.filter(item => item !== '');
       setCompletePage(filteredCompletePage);
       // console.log(filteredCompletePage); // check filteredCompletePage
     }
+    
+    
   }, [data]);
   
   return (
@@ -323,7 +333,7 @@ const DetailsContent = ({name, data}) => {
         <div className="col-lg-8">
           <article>
             <div className="news-img">
-              <img src="/assets/img/news/telegram/telegram.png" alt="Image" />
+              <img src={data?.image && data?.image[0]} alt="Image" />
               <a href="business.html" className="news-cat">{data?.category}</a>
             </div>
             <ul className="news-metainfo list-style">
@@ -340,12 +350,13 @@ const DetailsContent = ({name, data}) => {
               <h1>{data?.app_name}</h1>
               {completePage?.map((pageItem) => (
                 <>
-                {typeof(pageItem) === 'string' && pageItem != "<>Mod Info -" && !pageItem?.includes("/assets")  ? (<p>{pageItem}</p>) :null}
+                {typeof(pageItem) === 'string' && pageItem != "<>Mod Info -" && pageItem != name && !pageItem?.includes("/assets") && !pageItem?.includes("--=") ? (<p>{pageItem}</p>) :null}
                 {typeof(pageItem) === 'string' && pageItem?.includes("<>") && !pageItem?.includes("/assets") ? (<h5 className='mt-2'>{pageItem.replace("<>", "")}</h5>) :null}
+                {typeof(pageItem) === 'string' && pageItem?.includes("--=") && !pageItem?.includes("/assets") ? (<h6 className='mt-2'>{pageItem.replace("--=", "")}</h6>) :null}
                 {typeof(pageItem) === 'string' && pageItem?.includes("/assets") ? (<img src={pageItem} />) :null}
                 {typeof(pageItem) === 'object' ? (<ul className="content-feature-list list-style mt-15">
                   {pageItem?.map((lst) => (
-                  <li key={lst}><span><i class="flaticon-arrow-right"></i></span>
+                  <li key={lst}><span><i className="flaticon-arrow-right"></i></span>
                   {lst}</li>
                   ))}
                   </ul>) :null}
@@ -406,7 +417,7 @@ const DetailsContent = ({name, data}) => {
 </div>
               </div>
             </div> */}
-
+<div className="option-item"><NavLink to={data?.share_link} className="btn-two" target='_blank'>Download {name}</NavLink></div>
           </article>
           {/* <div className="post-pagination">
             <a className="prev-post" href="business-details.html">

@@ -1,7 +1,10 @@
 /* eslint-disable */
+import { useState } from 'react';
 import {NavLink} from 'react-router-dom'
 let Header = () => {
+  let [searchQuery , setSearchQuery] = useState('');
   return (
+    <>
 <div className="navbar-area header-one" id="navbar">
 <div className="header-top">
   <div className="container-fluid">
@@ -10,10 +13,10 @@ let Header = () => {
         <button className="subscribe-btn" data-bs-toggle="modal" data-bs-target="#newsletter-popup">Subscribe<i className="flaticon-right-arrow" /></button>
       </div>
       <div className="col-lg-4 col-md-6 md-none">
-        <a className="navbar-brand" href="index.html">
+        <NavLink className="navbar-brand" to="/">
           <img className="logo-light" src="/assets/img/logo-white.webp" alt="logo" />
           <img className="logo-dark" src="/assets/img/logo-white.webp" alt="logo" />
-        </a>
+        </NavLink>
       </div>
       <div className="col-lg-4 col-md-6 col-7">
         <ul className="social-profile list-style">
@@ -254,6 +257,20 @@ let Header = () => {
   </nav>
 </div>
 </div>
+  <div className="modal fade searchModal" id="searchModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <form>
+        <input type="text" className="form-control" placeholder="Search here...." onChange={(e)=> setSearchQuery(e.target.value)} />
+        <button type='button' data-bs-dismiss="modal" style={{pointerEvents : searchQuery.length === 0 ? 'none' : '', opacity : searchQuery.length === 0 ? '60%' : '100%'}}>
+        <NavLink to={`/search/${searchQuery}`}><i className="fi fi-rr-search" /></NavLink>
+        </button>
+      </form>
+      <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"><i className="ri-close-line" /></button>
+    </div>
+  </div>
+</div>
+</>
   );
 }
 
