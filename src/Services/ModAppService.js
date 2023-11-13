@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// let apiUrl = 'https://one001-ai-app-mod.onrender.com/api/mod/app/'
-let apiUrl = 'http://localhost:4011/api/mod/app/'
+let apiUrl = 'https://one001-ai-app-mod.onrender.com/api/mod/app/'
+// let apiUrl = 'http://localhost:4011/api/mod/app/'
 
 let addModApp = async (data) => {
     return await axios.post(apiUrl, data);
